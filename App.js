@@ -1,60 +1,50 @@
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-gesture-handler';
 import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+
+//import StudentLanding from './Student/StudentLanding';
+//import LecturerLanding from './Lecturer/LecturerLanding';
+
 import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import logo from './assets/logo.png';
+import lecturerImg from './assets/lecturer-profile.jpg';
+import studentImg from './assets/student-profile.jpg';
 
+function Landing(props) {
+  const isStudent = props.isStudent;
+  if (isStudent) {
+    return <StudentLanding />;
+  }
+  return <LecturerLanding />;
+}
 
-function LandingScreen({ navigation }) {
+function StudentLanding(props) {
+  return (
+
+    <View style={styles.container}>
+      <Image source={logo} style={{ width: 305, height: 90 }} />
+      <Text style={{ fontSize: 18, color: 'black', margin: 5, backgroundColor: '#efefef', padding: 8, width: 305, }}>Tafe Buddy</Text>
+      <Text style={{ fontSize: 22, color: 'black', margin: 12 }}>Hi *StudentName*</Text>
+      <Image source={studentImg} style={{ width: 305, height: 150 }} />
+      <Text style={{ fontSize: 18, color: 'black', margin: 25 }}>Welcome to the Tafe Buddy System. Your options are below.</Text>
+      </View>
+
+  );
+}
+
+function LecturerLanding(props) {
   return (
     <View style={styles.container}>
       <Image source={logo} style={{ width: 305, height: 90 }} />
-      <Text style={{ fontSize: 22, color: 'black', margin: 5, backgroundColor: '#efefef', padding: 8, width: 305, }}>Enrolment Buddy</Text>
-
-      <Text style={{ fontSize: 26, color: 'black', margin: 15 }}>Options for Students</Text>
-
-      <TouchableOpacity
-       onPress={() => navigation.navigate('EnrolInSubjects')}
-       style={{ backgroundColor: 'black', marginBottom: 8,}}>
-       <Text style={{ fontSize: 20, color: '#fff', padding: 8, width: 305, textAlign: 'center'}}>Enrol In Subjects</Text>
-       </TouchableOpacity>
-
-       <TouchableOpacity
-        onPress={() => navigation.navigate('BrowseTrainingPlan')}
-        style={{ backgroundColor: 'black', marginBottom: 8, }}>
-        <Text style={{ fontSize: 20, color: '#fff', padding: 8, width: 305, textAlign: 'center' }}>Browse Training Plan</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-         onPress={() => navigation.navigate('ViewSchedule')}
-         style={{ backgroundColor: 'black', marginBottom: 8, }}>
-         <Text style={{ fontSize: 20, color: '#fff', padding: 8, width: 305, textAlign: 'center' }}>View Schedule</Text>
-         </TouchableOpacity>
-
-      <StatusBar style="auto" />
-
-      <Text style={{ fontSize: 26, color: 'black', margin: 12 }}>Options for Lecturers</Text>
-      <TouchableOpacity
-       onPress={() => navigation.navigate('BrowseLecturer')}
-       style={{ backgroundColor: '#be1428', marginBottom: 8,}}>
-       <Text style={{ fontSize: 20, color: '#fff', padding: 8, width: 305, textAlign: 'center'}}>Browse Student Enrolment Summary</Text>
-       </TouchableOpacity>
-
-       <TouchableOpacity
-        onPress={() => navigation.navigate('BrowseMySubjects')}
-        style={{ backgroundColor: '#be1428', marginBottom: 8, }}>
-        <Text style={{ fontSize: 20, color: '#fff', padding: 8, width: 305, textAlign: 'center' }}>Browse Enrolment Summary For My Subjects</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-        onPress={() => navigation.navigate('BrowseAllSubjects')}
-         style={{ backgroundColor: '#be1428', marginBottom: 8, }}>
-         <Text style={{ fontSize: 20, color: '#fff', padding: 8, width: 305, textAlign: 'center' }}>Browse Enrolment Summary For Particular Subjects</Text>
-         </TouchableOpacity>
-      <StatusBar style="auto" />
-    </View>
+      <Text style={{ fontSize: 18, color: 'black', margin: 5, backgroundColor: '#efefef', padding: 8, width: 305, }}>Tafe Buddy</Text>
+      <Text style={{ fontSize: 22, color: 'black', margin: 12 }}>Hi *LecturerName*</Text>
+      <Image source={lecturerImg} style={{ width: 305, height: 150 }} />
+      <Text style={{ fontSize: 18, color: 'black', margin: 25 }}>Welcome to the Tafe Buddy System. Your options are below.</Text>
+      </View>
 
   );
 }
@@ -78,6 +68,7 @@ function BrowseTrainingPlanScreen() {
     </View>
   );
 }
+
 
 function ViewScheduleScreen() {
   return (
@@ -119,25 +110,146 @@ function BrowseAllSubjectsScreen() {
   );
 }
 
-const Stack = createStackNavigator();
+//const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-export default function App() {
+function StudentTabs() {
   return (
-    <NavigationContainer initialRouteName="Landing">
-      <Stack.Navigator>
-        <Stack.Screen name="Landing" component={LandingScreen} />
-        {/* Student Screens */}
-        <Stack.Screen name="EnrolInSubjects" component={EnrolInSubjectsScreen} />
-        <Stack.Screen name="BrowseTrainingPlan" component={BrowseTrainingPlanScreen} />
-        <Stack.Screen name="ViewSchedule" component={ViewScheduleScreen} />
-        {/* Lecturer Screens */}
-        <Stack.Screen name="BrowseLecturer" component={BrowseLecturerScreen} />
-        <Stack.Screen name="BrowseMySubjects" component={BrowseMySubjectsScreen} />
-        <Stack.Screen name="BrowseAllSubjects" component={BrowseAllSubjectsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        children={()=><Landing isStudent={true} />}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({}) => (
+              <Ionicons name="md-home" size={32} color="#be1428" />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Enrol"
+        component={EnrolInSubjectsScreen}
+        options={{
+          tabBarLabel: 'Enrol',
+          tabBarIcon: ({}) => (
+            <Ionicons name="md-add" size={32} color="#be1428" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Training Plan"
+        component={BrowseTrainingPlanScreen}
+        options={{
+          tabBarLabel: 'Training Plan',
+          tabBarIcon: ({}) => (
+            <Ionicons name="md-paper" size={32} color="#be1428" />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Schedule"
+        component={ViewScheduleScreen}
+        options={{
+          tabBarLabel: 'Schedule',
+          tabBarIcon: ({}) => (
+            <Ionicons name="md-calendar" size={32} color="#be1428" />
+          ),
+        }}
+      />
+
+
+
+    </Tab.Navigator>
   );
 }
+
+function LecturerTabs() {
+  return (
+    <Tab.Navigator>
+
+      <Tab.Screen
+        name="Home"
+        children={()=><Landing isStudent={false} />}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({}) => (
+              <Ionicons name="md-home" size={32} color="#be1428" />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="BrowseLecturer"
+        component={BrowseLecturerScreen}
+        options={{
+          tabBarLabel: 'Browse Student Enrolment Summary',
+          tabBarIcon: ({}) => (
+              <Ionicons name="md-search" size={32} color="#be1428" />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="BrowseMySubjects"
+        component={BrowseMySubjectsScreen}
+        options={{
+          tabBarLabel: 'Browse My Subjects',
+          tabBarIcon: ({}) => (
+              <Ionicons name="md-person" size={32} color="#be1428" />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="BrowseAllSubjects"
+        component={BrowseAllSubjectsScreen}
+        options={{
+          tabBarLabel: 'Browse All Subjects',
+          tabBarIcon: ({}) => (
+              <Ionicons name="md-school" size={32} color="#be1428" />
+          ),
+        }}
+      />
+
+
+
+    </Tab.Navigator>
+  );
+}
+
+
+export default function App(props) {
+
+  const isStudent = true;
+
+  if (isStudent) {
+
+    return <NavigationContainer>
+      <StudentTabs />
+    </NavigationContainer>;
+
+  }
+
+  else{
+
+    return <NavigationContainer>
+      <LecturerTabs />
+    </NavigationContainer>;
+
+  }
+
+  //return (
+
+
+
+
+
+//  );
+}
+
+
 
 const styles = StyleSheet.create({
   container: {
