@@ -18,13 +18,14 @@
 
  import React, { Component } from 'react'
  import {View, Image, Text, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
- 
+ import HomeScreen from './homeScreen.js'
 
  class LoginScreen extends Component {
      state = {
          email: '',
          password: ''
      }
+
      //Sets user's text inputs into the State.
      handleEmail = (text) => {
          this.setState({email: text})
@@ -34,13 +35,14 @@
      }
      //Displays the current State when called
      login = (email, pass) => {
-         alert('email: ' + email + '\npassword: ' + pass)
+        alert('email: ' + email + '\npassword: ' + pass);
      }
+
      render() {
          return(
             <View style = {styles.container}>
                 <View style = {styles.columnContainer}>
-                    <View style = {styles.headerView}>
+                    <View >
                         <Image 
                         style={styles.headerImage_TAFELogo}
                         source={require('../assets/tafe_logo3.png')} />
@@ -73,11 +75,13 @@
                     </View>
                     <Text style = {styles.subInputText}>
                         Forgot your password? Click HERE
-                        </Text> 
+                    </Text> 
                     <View style = {styles.inputView} >
                         <TouchableOpacity
                             style = {styles.submitButton}
-                            onPress = {() => this.login(this.state.email, this.state.password)}>
+                            onPress = {
+                                () => this.login(this.state.email, this.state.password)
+                                }>
                             <Text 
                                 style = {styles.submitButtonText}> Login 
                             </Text>
@@ -93,7 +97,7 @@
  const styles  = StyleSheet.create({
      container:{
         flex: 1,
-         paddingTop: 23
+        paddingTop: 23
      },
      columnContainer:{
         flex: 1,
@@ -114,8 +118,9 @@
         resizeMode: 'contain'
      },
      passwordImage:{
-        height: 50,
-        width: 50,
+        height: 49,
+        width: 49,
+        borderRadius: 25,
      },
      input: {
          textAlign: "center",
